@@ -4,10 +4,8 @@ import com.cybertek.lambdastream.model.CourseAssigned;
 import com.cybertek.lambdastream.model.CourseStatus;
 import com.cybertek.lambdastream.model.User;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Exam {
 
@@ -45,22 +43,23 @@ public class Exam {
     /**
      * Group by and count courses by status.
      */
-    public static Map<CourseStatus, Long>  countCoursesByStatus() {
+    public static Map<CourseStatus, Long> countCoursesByStatus() {
         //Write your code..
         return null;
     }
 
     /**
      * Sum all duration for all records.
+     *
      * @return sum of duration.
      */
     public static Integer sumDurationForAllData() {
-
         return null;
     }
 
     /**
      * Find Courses attended by a specific user.
+     *
      * @return
      */
     public static List<CourseAssigned> findCoursesByUser() {
@@ -77,7 +76,4 @@ public class Exam {
         return null;
     }
 
-    public static void main(String[] args) {
-        System.out.println(modifyObject());
-    }
 }
