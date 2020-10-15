@@ -3,58 +3,74 @@ package com.cybertek.lambdastream;
 import com.cybertek.lambdastream.model.CourseAssigned;
 import com.cybertek.lambdastream.model.CourseStatus;
 import com.cybertek.lambdastream.model.User;
+import com.cybertek.lambdastream.model.UserState;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Exam {
 
     /**
      * Read all manager users.
+     * Read all users that role name is equal to "MANAGER".
+     * Read all users via "filter" streamline keyword.
      *
-     * @return
+     * @return list of managers {@link List<User>}.
      */
     public static List<User> readAllManagers() {
-        // Write your stream code here to read all manager users.
-        return null;
+        return DataGenerator.fillUsers().stream()
+                .filter(user -> user.getRole().getName().equals("MANAGER"))
+                .collect(Collectors.toList());
     }
 
     /**
      * Read all SUSPENDED users.
+     * Read all users that role is SUSPENDED.
+     * Make condition using "==" sign instead of .equal() comparing strings method.
      *
-     * @return
+     * @return suspended users. {@link List<User>}
      */
     public static List<User> readAllSuspendedUsers() {
-        //Write your stream code to read all users that have SUSPENDED status.
-        return null;
+        return DataGenerator.fillUsers().stream()
+                .filter(user -> user.getState() == UserState.SUSPENDED)
+                .collect(Collectors.toList());
     }
 
     /**
      * Count all courses.
      *
-     * @return
+     * @return number of courses {@link Integer}
      */
     public static Integer countCourses() {
-        // Write your code for how many courses do we have?.
-        return null;
+        return DataGenerator.fillCourses().size();
     }
 
 
     /**
      * Group by and count courses by status.
+     * Count courses by status via "groupingBy" streamline keyword.
+     * Return a specific result with course status and size of records for that course status
+     *
+     * @return a specific map, with course status and size of records for that. {@link Map<CourseStatus,Long>}
      */
     public static Map<CourseStatus, Long> countCoursesByStatus() {
-        //Write your code..
-        return null;
+        return DataGenerator.fillCoursesAssigned().stream()
+                .collect(Collectors.groupingBy(CourseAssigned::getStatus, Collectors.counting()));
     }
 
     /**
      * Sum all duration for all records.
+     * Sum all course duration without any condition via "reduce" stream keyword.
      *
-     * @return sum of duration.
+     * @return sum of duration. {@link Integer}.
      */
     public static Integer sumDurationForAllData() {
-        return null;
+        return DataGenerator.fillCoursesAssigned().stream()
+                .map(x -> x.getCourse().getDuration())
+                .reduce(0, Integer::sum);
+
     }
 
     /**
@@ -64,8 +80,10 @@ public class Exam {
      */
     public static List<CourseAssigned> findCoursesByUser() {
         User specificUser = DataGenerator.findUserById(6);
-        //Write your code to return all courses by specific user...;
-        return null;
+
+        return DataGenerator.fillCoursesAssigned().stream()
+                .filter(courseAssigned -> courseAssigned.getUser().equals(specificUser))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -73,7 +91,15 @@ public class Exam {
      * Modify response to show only course name, course duration, (user firstName + user lastName)
      */
     public static List<Map<String, Object>> modifyObject() {
-        return null;
+        List<Map<String, Object>> result = DataGenerator.fillCoursesAssigned().stream()
+                .filter(course -> course.getStatus() == CourseStatus.FINISHED)
+                .map(course -> {
+                    Map<String, Object> modifyResult = new HashMap<>();
+                    modifyResult.put("courseName", course.getCourse().getName());
+                    modifyResult.put("courseDuration", course.getCourse().getDuration());
+                    modifyResult.put("username", course.getUser().getFirstName() + " " + course.getUser().getLastName());
+                    return modifyResult;
+                }).collect(Collectors.toList());
+        return result;
     }
-
 }
