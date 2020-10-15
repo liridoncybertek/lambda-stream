@@ -89,7 +89,4 @@ public class Exam {
         return null;
     }
 
-    public static void main(String[] args) {
-    }
-
 }
