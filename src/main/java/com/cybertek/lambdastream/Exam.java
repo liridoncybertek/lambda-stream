@@ -5,6 +5,7 @@ import com.cybertek.lambdastream.model.CourseStatus;
 import com.cybertek.lambdastream.model.User;
 import com.cybertek.lambdastream.model.UserState;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,5 +102,26 @@ public class Exam {
                     return modifyResult;
                 }).collect(Collectors.toList());
         return result;
+    }
+
+    /**
+     * Duration of course that is in hours return to week that specific user finished courses.
+     * One week has 40 hours working time. divider parameter should be 40.
+     * Filter all courses by a specific user and course status to be FINISHED via "filter" stream keyword.
+     * convert duration from integer to bigDecimal via "map" keyword.
+     * Sum all courses hours via "reduce" keyword.
+     * Divide getting result in hours with @{@link BigDecimal#divideToWeek} parameter.
+     * @return converted duration to week. {@link BigDecimal}
+     */
+    public static BigDecimal divideToWeek() {
+        User specificUser = DataGenerator.findUserById(6);
+        BigDecimal divideToWeek = new BigDecimal(40);
+        BigDecimal convertToWeek = DataGenerator.fillCoursesAssigned().stream()
+                .filter(courseAssigned -> courseAssigned.getStatus() == CourseStatus.FINISHED && courseAssigned.getUser().equals(specificUser))
+                .map(courseAssigned -> new BigDecimal(courseAssigned.getCourse().getDuration()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .divide(divideToWeek, 2);
+
+        return convertToWeek;
     }
 }
