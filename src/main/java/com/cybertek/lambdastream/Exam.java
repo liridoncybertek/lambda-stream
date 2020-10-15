@@ -110,7 +110,7 @@ public class Exam {
      * Filter all courses by a specific user and course status to be FINISHED via "filter" stream keyword.
      * convert duration from integer to bigDecimal via "map" keyword.
      * Sum all courses hours via "reduce" keyword.
-     * Divide getting result in hours with @{@link BigDecimal#divideToWeek} parameter.
+     * Divide getting result in hours with @{@link BigDecimal} divideToWeek parameter.
      * @return converted duration to week. {@link BigDecimal}
      */
     public static BigDecimal divideToWeek() {
